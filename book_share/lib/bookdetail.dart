@@ -83,8 +83,7 @@ class _BookDetailsState extends State<BookDetails> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Padding(
-                                        padding:
-                                            const EdgeInsets.only(top: 30),
+                                        padding: const EdgeInsets.only(top: 30),
                                         child: Text(
                                           widget.book.booktitle,
                                           style: GoogleFonts.hankenGrotesk(
@@ -116,51 +115,21 @@ class _BookDetailsState extends State<BookDetails> {
                                       const SizedBox(height: 5),
                                       Row(
                                         children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color.fromRGBO(
-                                              231,
-                                              181,
-                                              63,
-                                              1,
+                                          SizedBox(
+                                            child: Row(
+                                              children: List.generate(
+                                                  widget.book.rating.toInt(),
+                                                  (index) {
+                                                return const Icon(
+                                                  Icons.star,
+                                                  color: Color.fromRGBO(231, 181, 63, 1),
+                                                );
+                                              }),
                                             ),
                                           ),
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color.fromRGBO(
-                                              231,
-                                              181,
-                                              63,
-                                              1,
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color.fromRGBO(
-                                              231,
-                                              181,
-                                              63,
-                                              1,
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color.fromRGBO(
-                                              231,
-                                              181,
-                                              63,
-                                              1,
-                                            ),
-                                          ),
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color.fromRGBO(
-                                              231,
-                                              181,
-                                              63,
-                                              1,
-                                            ),
-                                          ),
+                
+                                          ((widget.book.rating * 10) % 10==5)?const Icon(Icons.star_half_sharp,color:Color.fromRGBO(231, 181, 63, 1)):const SizedBox(),
+                                          
                                           const SizedBox(
                                             width: 5,
                                           ),
@@ -266,14 +235,14 @@ class _BookDetailsState extends State<BookDetails> {
                             style: GoogleFonts.hankenGrotesk(
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
-                              color: Color.fromRGBO(0, 0, 0, 1),
+                              color: const Color.fromRGBO(0, 0, 0, 1),
                             ),
                           ),
                           const SizedBox(height: 10),
                           Text(
                             widget.book.aboutbook,
                             style: GoogleFonts.hankenGrotesk(
-                              color: Color.fromRGBO(144, 145, 160, 1),
+                              color: const Color.fromRGBO(144, 145, 160, 1),
                               fontSize: 16,
                               fontWeight: FontWeight.normal,
                             ),

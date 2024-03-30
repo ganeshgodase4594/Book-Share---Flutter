@@ -40,19 +40,24 @@ static Future<void> insertBookData(Book book) async{
 
     final localDB = await database;
 
-    localDB.insert("bookDB",book.BookdataMap(),
-    ConflictAlgorithm: ConflictAlgorithm.replace);
+    localDB.insert("bookinfo",book.BookdataMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace);
 
 
   }
 
-  Future<List<Map<String,dynamic>>> getBookData() async{
+  static Future<List<Book>> getBookData() async{
 
     final localDB = await database;
 
-    List<Map<String,dynamic>> returnbookdata = await localDB.query('bookDB.db');
-    return returnbookdata;
+    List<Book>obj = [];
+
+    List<Map<String,dynamic>> returnbookdata = await localDB.query('bookinfo');
+
+    for(int i=0;i<returnbookdata.length;i++){
+        obj.add(Book(bookid: returnbookdata[i]['bookid'], booktitle: returnbookdata[i]['booktitle'], bookdesc: returnbookdata[i]['bookdesc'], rating: returnbookdata[i]['rating'], authorname: returnbookdata[i]['authorname'], authordesc: returnbookdata[i]['authordesc'], aboutbook: returnbookdata[i]['aboutbook'], bookimg: returnbookdata[i]['bookimg']));
+    }
+
+    return obj;
   }
-
-
 }
