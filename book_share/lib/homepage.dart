@@ -1,3 +1,4 @@
+
 import 'package:book_share/Controller/BookController.dart';
 import 'package:book_share/addbookdata.dart';
 import 'package:book_share/background.dart';
@@ -5,9 +6,7 @@ import 'package:book_share/backgroundimage.dart';
 import 'package:book_share/bookdetail.dart';
 import 'package:book_share/congratulations.dart';
 import 'package:book_share/database.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -55,8 +54,7 @@ class _HomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
-    print("Length:  ${popularBook.length}");
-    print("Popular Book: ${popularBook}");
+    
     if (booksobj.isNotEmpty) {
       return Scaffold(
           // backgroundColor: Color.fromARGB(255, 238, 238, 238),
@@ -361,7 +359,13 @@ class _HomePageState extends State {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        purchaseBook(popularBook[index]);
+                                        if(popularBook[index].bookCount >=1){
+                                            purchaseBook(popularBook[index]);
+                                        }
+                                        else{
+                                            FluterSnackBarMSG(title: "Book is Unavailable...!",message: "You may check later");
+                                        }
+                                       
                                       },
                                       child: Container(
                                         alignment: Alignment.center,
@@ -482,14 +486,21 @@ class _HomePageState extends State {
 
                           // const Spacer(),
                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text("Select Qty"),
+                              const SizedBox(height: 5,),
                               Row(
                                 children: [
                                   GestureDetector(
                                     onTap: (){
-                                        _bookController.bookQuantity.value++;
-                                        _bookController.purchaseBookPrice.value =  calculatePrice(originalPrice: bookObj.bookPrice,bookQnty: _bookController.bookQuantity.value);
+                                        if(_bookController.bookQuantity.value+1 <=bookObj.bookCount){
+                                          _bookController.bookQuantity.value++;
+                                          _bookController.purchaseBookPrice.value =  calculatePrice(originalPrice: bookObj.bookPrice,bookQnty: _bookController.bookQuantity.value);
+                                        }
+                                        else{
+                                            FluterSnackBarMSG(title: "Warning..!", message: "${bookObj.bookCount} books available in stock");
+                                        }
                                       
                                     },
                                     child: Container(
@@ -584,20 +595,22 @@ class _HomePageState extends State {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            width: 40,
-                          ),
-                          Container(
+                          // const SizedBox(
+                          //   width: 40,
+                          // ),
+                          Spacer(),
+                          GestureDetector(
+                              onTap: () {
+                                navigator?.pop(context);
+                              },
+                          child:Container(
                             padding: const EdgeInsets.only(
                                 left: 40, right: 40, top: 10, bottom: 10),
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(14),
                                 color: Colors.redAccent),
-                            child: GestureDetector(
-                              onTap: () {
-                                navigator?.pop(context);
-                              },
-                              child: Text(
+                            
+                               child: Text(
                                 "No",
                                 style: GoogleFonts.hankenGrotesk(
                                     textStyle: const TextStyle(
@@ -622,5 +635,59 @@ class _HomePageState extends State {
 
   int calculatePrice({ required int originalPrice, required int bookQnty}) {
     return originalPrice * bookQnty;
+  }
+
+  void FluterSnackBarMSG({required String title,required String message}){
+
+        Get.snackbar(
+        "",
+        "",
+        backgroundColor: Colors.transparent,
+        overlayBlur: 5,
+        titleText: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+            color: Colors.white,
+            border: Border.all(color: const Color.fromARGB(255, 190, 190, 190)),
+            borderRadius: BorderRadius.circular(20),
+            ),
+            child:  Row(
+            children: [
+                const CircleAvatar(
+                backgroundColor: Colors.red,
+                child: Icon(
+                    Icons.close,
+                    color: Color.fromARGB(255, 248, 248, 248),
+                ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                    Text(
+                        title,
+                        style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        ),
+                    ),
+                    Text(
+                        message,
+                        style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                        ),
+                    ),
+                    ],
+                ),
+                ),
+            ],
+            ),
+        ),
+    );
+  
   }
 }

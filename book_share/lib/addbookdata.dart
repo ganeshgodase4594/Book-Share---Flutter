@@ -124,5 +124,5 @@ Book book7 = Book(
     bookimg: "assets/images/new.png",
     bookPrice: 2499,
     bookReviews: 22.95,
-    bookCount: 0
+    bookCount: 15
 );
