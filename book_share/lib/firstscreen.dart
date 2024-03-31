@@ -14,7 +14,7 @@ class _screen1state extends State<splashscreen> {
   void initState(){
     super.initState();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 1), () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
             return screen1();
           }));
