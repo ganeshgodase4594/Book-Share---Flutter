@@ -1,8 +1,6 @@
 
 import 'package:book_share/Controller/BookController.dart';
-import 'package:book_share/addbookdata.dart';
 import 'package:book_share/background.dart';
-import 'package:book_share/backgroundimage.dart';
 import 'package:book_share/bookdetail.dart';
 import 'package:book_share/congratulations.dart';
 import 'package:book_share/database.dart';
@@ -24,8 +22,11 @@ class _HomePageState extends State {
 
   final BookController _bookController = Get.put(BookController());
 
+
   @override
   void initState() {
+    booksobj.clear();
+    popularBook.clear();
     super.initState();
 
     getBookData();
@@ -54,6 +55,8 @@ class _HomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
+
+    print("Popular Object: $popularBook");
     
     if (booksobj.isNotEmpty) {
       return Scaffold(
@@ -244,6 +247,7 @@ class _HomePageState extends State {
                               fontSize: 20,
                               fontWeight: FontWeight.w700))),
                   SizedBox(
+                    
                     height: 200,
                     child: ListView.builder(
                         padding: const EdgeInsets.all(0),
@@ -574,9 +578,26 @@ class _HomePageState extends State {
                         children: [
                           GestureDetector(
                             onTap: () {
+
+                              print(popularBook);
+
+                              int addbookcount = _bookController.bookQuantity.value;
+
+                            // update bookcount
+
+                            print("Selected Count: $addbookcount");
+
+                              Book updatedBookObj = Book(bookid: bookObj.bookid, booktitle: bookObj.booktitle, bookdesc: bookObj.bookdesc, rating: bookObj.rating, authorname: bookObj.authorname, authordesc: bookObj.authordesc, aboutbook: bookObj.aboutbook, bookimg: bookObj.bookimg, bookPrice: bookObj.bookPrice, bookReviews: bookObj.bookReviews, bookCount: (bookObj.bookCount - addbookcount));
+
+                              print("UpdatedO j: $updatedBookObj");
+
+                              Book.updateBookCount(updatedBookObj);
+
                              Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) =>  CongratulationsScreen()),
+                              MaterialPageRoute(builder: (context) {
+                                return CongratulationsScreen();
+                              }),
                              );
                             },
                             child: Container(

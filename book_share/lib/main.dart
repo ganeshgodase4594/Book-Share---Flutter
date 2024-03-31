@@ -39,10 +39,8 @@ void main() async {
   Book.insertBookData(book6);
   Book.insertBookData(book7);
 
-
-  // List<Map<String,dynamic>>data = await Book.getBookData();
-  // print("Length:  ${data.length}");
 }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

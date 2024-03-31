@@ -45,9 +45,14 @@ class Book{
       };
   }
 
-  String toString(){
-    return '''{ bookid:$bookid booktitle:$booktitle 'rating':$rating,'authorname':$authorname}\n''';
-  }
+  String toString() {
+  return '''{ 
+    'bookId':$bookid,
+    'booktitle':$booktitle
+    'bookCount': $bookCount
+  }\n''';
+}
+
 
 static Future<void> insertBookData(Book book) async{
 
@@ -56,6 +61,18 @@ static Future<void> insertBookData(Book book) async{
     localDB.insert("bookinfo",book.BookdataMap(),
     conflictAlgorithm: ConflictAlgorithm.replace);
   }
+
+ static Future<void> updateBookCount(Book book) async {
+  print("In update Book");
+  final localdb = await database;
+
+  await localdb.update(
+    'bookinfo',
+    book.BookdataMap(),
+    where: 'bookid = ?',
+    whereArgs: [book.bookid],
+  );
+}
 
   static Future<List<Book>> getBookData() async{
 
