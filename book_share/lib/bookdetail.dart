@@ -1,5 +1,8 @@
 import 'package:book_share/database.dart';
+import 'package:book_share/feedbackscreen.dart';
+import 'package:book_share/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BookDetails extends StatefulWidget {
@@ -61,6 +64,9 @@ class _BookDetailsState extends State<BookDetails> {
                             // ),
 
                             PopupMenuButton(
+                              onSelected: (String value) {
+                                bookDetailsmenu(value);
+                              },
                               icon: const Icon(
                                 Icons.menu,
                                 color: Color.fromRGBO(255, 255, 255, 1),
@@ -71,9 +77,9 @@ class _BookDetailsState extends State<BookDetails> {
                                     value: 'item1',
                                     child: Row(
                                       children: [
-                                        Icon(Icons.star, color: Colors.black),
+                                        Icon(Icons.home, color: Colors.black),
                                         SizedBox(width: 10),
-                                        Text('Rate The Book',
+                                        Text('Home',
                                             style:
                                                 TextStyle(color: Colors.black)),
                                       ],
@@ -83,9 +89,10 @@ class _BookDetailsState extends State<BookDetails> {
                                     value: 'item2',
                                     child: Row(
                                       children: [
-                                        Icon(Icons.favorite, color: Colors.black),
+                                        Icon(Icons.favorite,
+                                            color: Colors.black),
                                         SizedBox(width: 10),
-                                        Text('Add your favourite book',
+                                        Text('Rate the book',
                                             style:
                                                 TextStyle(color: Colors.black)),
                                       ],
@@ -107,9 +114,9 @@ class _BookDetailsState extends State<BookDetails> {
                                     value: 'item4',
                                     child: Row(
                                       children: [
-                                        Icon(Icons.mail, color: Colors.black),
+                                        Icon(Icons.help, color: Colors.black),
                                         SizedBox(width: 10),
-                                        Text('contact author',
+                                        Text('Help',
                                             style:
                                                 TextStyle(color: Colors.black)),
                                       ],
@@ -321,5 +328,80 @@ class _BookDetailsState extends State<BookDetails> {
         ],
       ),
     );
+  }
+
+  void bookDetailsmenu(String value) {
+    double _rating = 0;
+    if (value == 'item1') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return const HomePage();
+          },
+        ),
+      );
+    } else if (value == 'item2') {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text(
+                "Rate The Book",
+                style: GoogleFonts.hankenGrotesk(
+                    fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              content: RatingBar.builder(
+                  initialRating: 1,
+                  allowHalfRating: true,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  itemCount: 5,
+                  itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => const Icon(
+                        Icons.star,
+                        color: Colors.amber,
+                      ),
+                  onRatingUpdate: (rating) {
+                    setState(() {
+                      _rating = rating;
+                    });
+                  }),
+                   actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Close",
+                  style: GoogleFonts.hankenGrotesk(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text(
+                  "Rate us",
+                  style: GoogleFonts.hankenGrotesk(
+                      fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+            );
+          });
+    } else if (value == 'item3') {
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) {
+            return  FeedbackScreen();
+          },
+        ),
+      );
+
+    } else if (value == 'item4') {}
   }
 }
