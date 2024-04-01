@@ -1,10 +1,10 @@
-
 import 'package:book_share/Controller/BookController.dart';
 import 'package:book_share/background.dart';
 import 'package:book_share/bookdetail.dart';
 import 'package:book_share/congratulations.dart';
 import 'package:book_share/database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +21,6 @@ class _HomePageState extends State {
   List<Book> popularBook = [];
 
   final BookController _bookController = Get.put(BookController());
-
 
   @override
   void initState() {
@@ -55,9 +54,8 @@ class _HomePageState extends State {
 
   @override
   Widget build(BuildContext context) {
-
     print("Popular Object: $popularBook");
-    
+
     if (booksobj.isNotEmpty) {
       return Scaffold(
           // backgroundColor: Color.fromARGB(255, 238, 238, 238),
@@ -74,7 +72,9 @@ class _HomePageState extends State {
               child: Row(
                 children: [
                   IconButton(
-                      onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+                      onPressed: () {
+                       Navigator.pop(context);
+                      }, icon: const Icon(Icons.arrow_back)),
                   const Spacer(),
                   Text(
                     "Book of the week",
@@ -82,7 +82,56 @@ class _HomePageState extends State {
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   const Spacer(),
-                  IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+                  //IconButton(onPressed: () {}, icon: const Icon(Icons.menu)),
+
+                  PopupMenuButton(
+                    icon: const Icon(Icons.menu),
+                    itemBuilder: (BuildContext context) {
+                      return <PopupMenuEntry<String>>[
+                        const PopupMenuItem<String>(
+                          value: 'item1',
+                          child: Row(
+                            children: [
+                              Icon(Icons.home, color: Colors.black),
+                              SizedBox(width: 10),
+                              Text('Home', style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'item2',
+                          child: Row(
+                            children: [
+                              Icon(Icons.star, color: Colors.black),
+                              SizedBox(width: 10),
+                              Text('Rate App', style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                        const PopupMenuItem<String>(
+                          value: 'item3',
+                          child: Row(
+                            children: [
+                              Icon(Icons.phone, color: Colors.black),
+                              SizedBox(width: 10),
+                              Text('Contact', style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+
+                        const PopupMenuItem<String>(
+                          value: 'item4',
+                          child: Row(
+                            children: [
+                              Icon(Icons.info, color: Colors.black),
+                              SizedBox(width: 10),
+                              Text('About us', style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
+                        ),
+                      ];
+                    },
+                  )
                 ],
               ),
             ),
@@ -117,13 +166,12 @@ class _HomePageState extends State {
                           height: 10,
                         ),
                         Text(
-                         booksobj[6].booktitle,
+                          booksobj[6].booktitle,
                           style: GoogleFonts.hankenGrotesk(
                               textStyle: const TextStyle(
                                   fontSize: 14, fontWeight: FontWeight.w600)),
                         ),
-                        Text(
-                            booksobj[6].bookdesc,
+                        Text(booksobj[6].bookdesc,
                             style: GoogleFonts.hankenGrotesk(
                                 textStyle: const TextStyle(
                                     fontSize: 8, fontWeight: FontWeight.w400))),
@@ -147,7 +195,8 @@ class _HomePageState extends State {
                                   "Grab Now",
                                   style: GoogleFonts.hankenGrotesk(
                                       textStyle: const TextStyle(
-                                          color: Color.fromRGBO(255, 255, 255, 1),
+                                          color:
+                                              Color.fromRGBO(255, 255, 255, 1),
                                           fontSize: 10,
                                           fontWeight: FontWeight.w700)),
                                 ),
@@ -247,7 +296,6 @@ class _HomePageState extends State {
                               fontSize: 20,
                               fontWeight: FontWeight.w700))),
                   SizedBox(
-                    
                     height: 200,
                     child: ListView.builder(
                         padding: const EdgeInsets.all(0),
@@ -363,13 +411,13 @@ class _HomePageState extends State {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        if(popularBook[index].bookCount >=1){
-                                            purchaseBook(popularBook[index]);
+                                        if (popularBook[index].bookCount >= 1) {
+                                          purchaseBook(popularBook[index]);
+                                        } else {
+                                          FluterSnackBarMSG(
+                                              title: "Book is Unavailable...!",
+                                              message: "You may check later");
                                         }
-                                        else{
-                                            FluterSnackBarMSG(title: "Book is Unavailable...!",message: "You may check later");
-                                        }
-                                       
                                       },
                                       child: Container(
                                         alignment: Alignment.center,
@@ -444,271 +492,329 @@ class _HomePageState extends State {
         builder: (BuildContext context) {
           return StatefulBuilder(builder: (context, setState) {
             return Dialog(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0)), //this right here
-              child: Container(
-                height: 400,
-                child: Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child:Obx(() => Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(
-                        bookObj.bookimg,
-                        height: 150,
-                        width: 200,
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      const Text("Do you want to purchase ? "),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Container(
-                              child: Column(children: [
-                            const Text("Price"),
-                            Row(
+                shape: RoundedRectangleBorder(
+                    borderRadius:
+                        BorderRadius.circular(20.0)), //this right here
+                child: Container(
+                  height: 400,
+                  child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Obx(() => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(
-                                  Icons.currency_rupee_outlined,
-                                  size: 14,
+                                Image.asset(
+                                  bookObj.bookimg,
+                                  height: 150,
+                                  width: 200,
                                 ),
-                                Text(
-                                  "${_bookController.purchaseBookPrice.value}.00",
-                                  style: GoogleFonts.hankenGrotesk(
-                                      textStyle: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w600)),
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                              ],
-                            )
-                          ])),
+                                const Text("Do you want to purchase ? "),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                        child: Column(children: [
+                                      const Text("Price"),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.currency_rupee_outlined,
+                                            size: 14,
+                                          ),
+                                          Text(
+                                            "${_bookController.purchaseBookPrice.value}.00",
+                                            style: GoogleFonts.hankenGrotesk(
+                                                textStyle: const TextStyle(
+                                                    fontSize: 10,
+                                                    fontWeight:
+                                                        FontWeight.w600)),
+                                          ),
+                                        ],
+                                      )
+                                    ])),
 
-                          // const Spacer(),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text("Select Qty"),
-                              const SizedBox(height: 5,),
-                              Row(
-                                children: [
-                                  GestureDetector(
-                                    onTap: (){
-                                        if(_bookController.bookQuantity.value+1 <=bookObj.bookCount){
-                                          _bookController.bookQuantity.value++;
-                                          _bookController.purchaseBookPrice.value =  calculatePrice(originalPrice: bookObj.bookPrice,bookQnty: _bookController.bookQuantity.value);
-                                        }
-                                        else{
-                                            FluterSnackBarMSG(title: "Warning..!", message: "${bookObj.bookCount} books available in stock");
-                                        }
-                                      
-                                    },
-                                    child: Container(
-                                      height: 25,
-                                      width: 40,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4)),
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 109, 109, 109)),
-                                          color: const Color.fromARGB(
-                                              255, 189, 189, 189)),
-                                      child: const Icon(
-                                        Icons.add,
-                                        size: 25,
+                                    // const Spacer(),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        const Text("Select Qty"),
+                                        const SizedBox(
+                                          height: 5,
+                                        ),
+                                        Row(children: [
+                                          GestureDetector(
+                                            onTap: () {
+                                              if (_bookController
+                                                          .bookQuantity.value +
+                                                      1 <=
+                                                  bookObj.bookCount) {
+                                                _bookController
+                                                    .bookQuantity.value++;
+                                                _bookController
+                                                        .purchaseBookPrice
+                                                        .value =
+                                                    calculatePrice(
+                                                        originalPrice:
+                                                            bookObj.bookPrice,
+                                                        bookQnty:
+                                                            _bookController
+                                                                .bookQuantity
+                                                                .value);
+                                              } else {
+                                                FluterSnackBarMSG(
+                                                    title: "Warning..!",
+                                                    message:
+                                                        "${bookObj.bookCount} books available in stock");
+                                              }
+                                            },
+                                            child: Container(
+                                              height: 25,
+                                              width: 40,
+                                              alignment: Alignment.center,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                          Radius.circular(4)),
+                                                  border: Border.all(
+                                                      color:
+                                                          const Color.fromARGB(
+                                                              255,
+                                                              109,
+                                                              109,
+                                                              109)),
+                                                  color: const Color.fromARGB(
+                                                      255, 189, 189, 189)),
+                                              child: const Icon(
+                                                Icons.add,
+                                                size: 25,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: 40,
+                                            alignment: Alignment.topCenter,
+                                            decoration: BoxDecoration(
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(4)),
+                                                border: Border.all(
+                                                    color: const Color.fromARGB(
+                                                        255, 109, 109, 109))),
+                                            child: Text(_bookController
+                                                .bookQuantity.value
+                                                .toString()),
+                                          ),
+                                          const SizedBox(
+                                            width: 6,
+                                          ),
+                                          GestureDetector(
+                                              onTap: () {
+                                                int qty = _bookController
+                                                    .bookQuantity.value;
+                                                if (--qty >= 0) {
+                                                  --_bookController
+                                                      .bookQuantity.value;
+                                                  _bookController
+                                                          .purchaseBookPrice
+                                                          .value =
+                                                      calculatePrice(
+                                                          originalPrice:
+                                                              bookObj.bookPrice,
+                                                          bookQnty:
+                                                              _bookController
+                                                                  .bookQuantity
+                                                                  .value);
+                                                }
+                                              },
+                                              child: Container(
+                                                height: 25,
+                                                width: 40,
+                                                alignment: Alignment.center,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                            Radius.circular(4)),
+                                                    border: Border.all(
+                                                        color: const Color
+                                                            .fromARGB(255, 109,
+                                                            109, 109)),
+                                                    color: const Color.fromARGB(
+                                                        255, 189, 189, 189)),
+                                                child: const Icon(
+                                                    FontAwesomeIcons.minus,
+                                                    size: 18,
+                                                    color: Color.fromARGB(
+                                                        255, 65, 65, 65)),
+                                              )),
+                                        ])
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 15,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        print(popularBook);
+
+                                        int addbookcount =
+                                            _bookController.bookQuantity.value;
+
+                                        // update bookcount
+
+                                        print("Selected Count: $addbookcount");
+
+                                        Book updatedBookObj = Book(
+                                            bookid: bookObj.bookid,
+                                            booktitle: bookObj.booktitle,
+                                            bookdesc: bookObj.bookdesc,
+                                            rating: bookObj.rating,
+                                            authorname: bookObj.authorname,
+                                            authordesc: bookObj.authordesc,
+                                            aboutbook: bookObj.aboutbook,
+                                            bookimg: bookObj.bookimg,
+                                            bookPrice: bookObj.bookPrice,
+                                            bookReviews: bookObj.bookReviews,
+                                            bookCount: (bookObj.bookCount -
+                                                addbookcount));
+
+                                        print("UpdatedO j: $updatedBookObj");
+
+                                        Book.updateBookCount(updatedBookObj);
+
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(builder: (context) {
+                                            return CongratulationsScreen();
+                                          }),
+                                        );
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 40,
+                                            right: 40,
+                                            top: 10,
+                                            bottom: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            color: Colors.greenAccent),
+                                        child: Text(
+                                          "Yes",
+                                          style: GoogleFonts.hankenGrotesk(
+                                              textStyle: const TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      255, 255, 255, 1),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700)),
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 6,),
-                                  Container(
-                                    height: 25,
-                                    width: 40,
-                                    alignment: Alignment.topCenter,
-                                    decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(4)),
-                                        border: Border.all(
-                                            color: const Color.fromARGB(
-                                                255, 109, 109, 109))),
-                                    child: Text(_bookController.bookQuantity.value.toString()),
-                                  ),
-                                  const SizedBox(width: 6,),
-                                  GestureDetector(
-                                    onTap: (){
-                                      int qty = _bookController.bookQuantity.value;
-                                      if(--qty>=0){             
-                                        -- _bookController.bookQuantity.value;
-                                        _bookController.purchaseBookPrice.value =  calculatePrice(originalPrice: bookObj.bookPrice,bookQnty: _bookController.bookQuantity.value);
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 25,
-                                      width: 40,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(4)),
-                                          border: Border.all(
-                                              color: const Color.fromARGB(
-                                                  255, 109, 109, 109)),
-                                          color: const Color.fromARGB(
-                                              255, 189, 189, 189)),
-                                      child:  const Icon(FontAwesomeIcons.minus,size: 18,color: Color.fromARGB(255, 65, 65, 65)),)
+                                    // const SizedBox(
+                                    //   width: 40,
+                                    // ),
+                                    Spacer(),
+                                    GestureDetector(
+                                      onTap: () {
+                                        navigator?.pop(context);
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.only(
+                                            left: 40,
+                                            right: 40,
+                                            top: 10,
+                                            bottom: 10),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(14),
+                                            color: Colors.redAccent),
+                                        child: Text(
+                                          "No",
+                                          style: GoogleFonts.hankenGrotesk(
+                                              textStyle: const TextStyle(
+                                                  color: Color.fromRGBO(
+                                                      255, 255, 255, 1),
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w700)),
+                                        ),
+                                      ),
                                     ),
-                                ]
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                        
-                   
-                      
-                       const SizedBox(
-                        height: 15,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-
-                              print(popularBook);
-
-                              int addbookcount = _bookController.bookQuantity.value;
-
-                            // update bookcount
-
-                            print("Selected Count: $addbookcount");
-
-                              Book updatedBookObj = Book(bookid: bookObj.bookid, booktitle: bookObj.booktitle, bookdesc: bookObj.bookdesc, rating: bookObj.rating, authorname: bookObj.authorname, authordesc: bookObj.authordesc, aboutbook: bookObj.aboutbook, bookimg: bookObj.bookimg, bookPrice: bookObj.bookPrice, bookReviews: bookObj.bookReviews, bookCount: (bookObj.bookCount - addbookcount));
-
-                              print("UpdatedO j: $updatedBookObj");
-
-                              Book.updateBookCount(updatedBookObj);
-
-                             Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) {
-                                return CongratulationsScreen();
-                              }),
-                             );
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.only(
-                                  left: 40, right: 40, top: 10, bottom: 10),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(14),
-                                  color: Colors.greenAccent),
-                              child: Text(
-                                "Yes",
-                                style: GoogleFonts.hankenGrotesk(
-                                    textStyle: const TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700)),
-                              ),
-                            ),
-                          ),
-                          // const SizedBox(
-                          //   width: 40,
-                          // ),
-                          Spacer(),
-                          GestureDetector(
-                              onTap: () {
-                                navigator?.pop(context);
-                              },
-                          child:Container(
-                            padding: const EdgeInsets.only(
-                                left: 40, right: 40, top: 10, bottom: 10),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(14),
-                                color: Colors.redAccent),
-                            
-                               child: Text(
-                                "No",
-                                style: GoogleFonts.hankenGrotesk(
-                                    textStyle: const TextStyle(
-                                        color: Color.fromRGBO(255, 255, 255, 1),
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.w700)),
-                              ),
-                            ),
-                          ),
-                        ],
-                      )
-                    ]
-                  
-                  ))
-                  ),
-            )
-
-            );
+                                  ],
+                                )
+                              ]))),
+                ));
           });
         });
   }
 
-  int calculatePrice({ required int originalPrice, required int bookQnty}) {
+  int calculatePrice({required int originalPrice, required int bookQnty}) {
     return originalPrice * bookQnty;
   }
 
-  void FluterSnackBarMSG({required String title,required String message}){
-
-        Get.snackbar(
-        "",
-        "",
-        backgroundColor: Colors.transparent,
-        overlayBlur: 5,
-        titleText: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: const Color.fromARGB(255, 190, 190, 190)),
-            borderRadius: BorderRadius.circular(20),
-            ),
-            child:  Row(
-            children: [
-                const CircleAvatar(
-                backgroundColor: Colors.red,
-                child: Icon(
-                    Icons.close,
-                    color: Color.fromARGB(255, 248, 248, 248),
-                ),
-                ),
-                const SizedBox(width: 20),
-                Expanded(
-                child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                    Text(
-                        title,
-                        style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        ),
-                    ),
-                    Text(
-                        message,
-                        style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 14,
-                        ),
-                    ),
-                    ],
-                ),
-                ),
-            ],
-            ),
+  void FluterSnackBarMSG({required String title, required String message}) {
+    Get.snackbar(
+      "",
+      "",
+      backgroundColor: Colors.transparent,
+      overlayBlur: 5,
+      titleText: Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border.all(color: const Color.fromARGB(255, 190, 190, 190)),
+          borderRadius: BorderRadius.circular(20),
         ),
+        child: Row(
+          children: [
+            const CircleAvatar(
+              backgroundColor: Colors.red,
+              child: Icon(
+                Icons.close,
+                color: Color.fromARGB(255, 248, 248, 248),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    message,
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
     );
-  
   }
 }

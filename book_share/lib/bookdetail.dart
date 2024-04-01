@@ -52,13 +52,72 @@ class _BookDetailsState extends State<BookDetails> {
                               ),
                             ),
                             const Spacer(),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Icon(
+                            // GestureDetector(
+                            //   onTap: () {},
+                            //   child: const Icon(
+                            //     Icons.menu,
+                            //     color: Color.fromRGBO(255, 255, 255, 1),
+                            //   ),
+                            // ),
+
+                            PopupMenuButton(
+                              icon: const Icon(
                                 Icons.menu,
                                 color: Color.fromRGBO(255, 255, 255, 1),
                               ),
-                            ),
+                              itemBuilder: (BuildContext context) {
+                                return <PopupMenuEntry<String>>[
+                                  const PopupMenuItem<String>(
+                                    value: 'item1',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.star, color: Colors.black),
+                                        SizedBox(width: 10),
+                                        Text('Rate The Book',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'item2',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.favorite, color: Colors.black),
+                                        SizedBox(width: 10),
+                                        Text('Add your favourite book',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'item3',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.feed, color: Colors.black),
+                                        SizedBox(width: 10),
+                                        Text('Your feedback',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ],
+                                    ),
+                                  ),
+                                  const PopupMenuItem<String>(
+                                    value: 'item4',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.mail, color: Colors.black),
+                                        SizedBox(width: 10),
+                                        Text('contact author',
+                                            style:
+                                                TextStyle(color: Colors.black)),
+                                      ],
+                                    ),
+                                  ),
+                                ];
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -122,14 +181,18 @@ class _BookDetailsState extends State<BookDetails> {
                                                   (index) {
                                                 return const Icon(
                                                   Icons.star,
-                                                  color: Color.fromRGBO(231, 181, 63, 1),
+                                                  color: Color.fromRGBO(
+                                                      231, 181, 63, 1),
                                                 );
                                               }),
                                             ),
                                           ),
-                
-                                          ((widget.book.rating * 10) % 10==5)?const Icon(Icons.star_half_sharp,color:Color.fromRGBO(231, 181, 63, 1)):const SizedBox(),
-                                          
+                                          ((widget.book.rating * 10) % 10 == 5)
+                                              ? const Icon(
+                                                  Icons.star_half_sharp,
+                                                  color: Color.fromRGBO(
+                                                      231, 181, 63, 1))
+                                              : const SizedBox(),
                                           const SizedBox(
                                             width: 5,
                                           ),
