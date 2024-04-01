@@ -57,7 +57,9 @@ class _screen1state extends State<screen1> {
                 Row(
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          //Navigator.pop(context);
+                        },
                         icon: const Icon(
                           Icons.arrow_back,
                           color: Color.fromRGBO(

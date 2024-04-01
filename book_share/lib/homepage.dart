@@ -1,8 +1,11 @@
 import 'package:book_share/Controller/BookController.dart';
+import 'package:book_share/aboutscreen.dart';
 import 'package:book_share/background.dart';
 import 'package:book_share/bookdetail.dart';
 import 'package:book_share/congratulations.dart';
+import 'package:book_share/contactscreen.dart';
 import 'package:book_share/database.dart';
+import 'package:book_share/rateapp.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_icon_class/font_awesome_icon_class.dart';
@@ -86,6 +89,9 @@ class _HomePageState extends State {
 
                   PopupMenuButton(
                     icon: const Icon(Icons.menu),
+                    onSelected: (String value) {
+                      menuFunctionality(value);
+                    },
                     itemBuilder: (BuildContext context) {
                       return <PopupMenuEntry<String>>[
                         const PopupMenuItem<String>(
@@ -816,5 +822,45 @@ class _HomePageState extends State {
         ),
       ),
     );
+  }
+  void menuFunctionality(String value){
+
+    if(value=='item1'){
+        Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return const HomePage();
+        },
+      ),
+    );
+    }else if(value=='item2'){
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return  rateAppScreen();
+        },
+      ),
+    );
+    }else if(value=='item3'){
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return  ContactScreen();
+        },
+      ),
+    );
+    }else if(value=='item4'){
+      Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (BuildContext context) {
+          return AboutUsScreen();
+        },
+      ),
+    );
+    }
   }
 }

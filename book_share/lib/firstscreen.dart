@@ -14,7 +14,7 @@ class _screen1state extends State<splashscreen> {
   void initState(){
     super.initState();
 
-    Timer(const Duration(seconds: 5), () {
+    Timer(const Duration(seconds: 10), () {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
             return screen1();
           }));
@@ -29,7 +29,7 @@ class _screen1state extends State<splashscreen> {
           SizedBox(
             width: MediaQuery.of(context).size.width,
             child: Image.asset(
-              "assets/images/Splash.png",
+              "assets/images/home2.jpg",
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.cover,
